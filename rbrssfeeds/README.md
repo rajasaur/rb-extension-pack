@@ -19,12 +19,13 @@ This extension adds RSS Feed (RSS 2.01 and Atom 1) support to Reviewboard. You c
 #### Screenshots
 <div>
 <b>Screenshot of Dashboard With the Extension installed</b>
-<img src="http://rajasaur.github.com/rb-extension-pack/screenshots/rbrssfeeds/feeds_dashboard.png" width=300 height=300" /> 
+<img src="http://rajasaur.github.com/rb-extension-pack/screenshots/rbrssfeeds/feeds_dashboard.png" width=800 height=500" /> 
 </div>
+<hr />
 <div>
 <b>Using a Liferea Client on Ubuntu with a feed obtained using this Extension</b>
-<img src="http://rajasaur.github.com/rb-extension-pack/screenshots/rbrssfeeds/liferea_feedpage.png" width=300 height=300" />
-</b
+<img src="http://rajasaur.github.com/rb-extension-pack/screenshots/rbrssfeeds/liferea_feedpage.png" width=800 height=500" />
+</div>
 
 #### Authors
 * Dolanor Tharivae - for the original source to the RSS Feed
