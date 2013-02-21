@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
@@ -9,7 +7,7 @@ from django.template.context import RequestContext
 from reviewboard.extensions.hooks import DashboardHook
 
 from rbcustomreports.reports import NotClosedWithShipItReport,\
-    NotReviewedReport, NotReviewedByMeReport
+    NotReviewedReport, NotReviewedByMeReport, FilterByRepositoryReport
 from rbcustomreports.datagrids import CustomDataGrid
 
 reports = {
@@ -24,6 +22,10 @@ reports = {
     'not_reviewed_by_me': {
         'data_class': NotReviewedByMeReport,
         'title': 'Not Reviewed By Me Requests',
+    },
+    'filter_by_repo': {
+        'data_class': FilterByRepositoryReport,
+        'title': 'Filter by Repository'
     }
 }
 
@@ -38,7 +40,13 @@ def report(request,
     if not report_title:
         raise Http404
 
-    grid = reports[report_name]['data_class'](request, title=report_title)
+    extra_context = {}
+    rb_object = request.GET.get('object', None)
+    if rb_object:
+        extra_context['rb_object'] = rb_object
+
+    grid = reports[report_name]['data_class'](request, title=report_title,
+                                              extra_context=extra_context)
     return grid.render_to_response(template_name, extra_context={
         'sidebar_hooks': DashboardHook.hooks,
     })
