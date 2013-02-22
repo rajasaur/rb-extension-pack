@@ -11,8 +11,26 @@ from reviewboard.scmtools.models import Repository
 
 class UserBasedDashboardHook(DashboardHook):
     def __init__(self, extension, entries):
-        self.main_entries = entries
         super(DashboardHook, self).__init__(extension)
+
+        self.report_details = {
+            'not_closed_with_shipit': {
+                'label': 'Not closed with Shipit',
+                'url': settings.SITE_ROOT +
+                "customreports/?name=not_closed_with_shipit",
+            },
+            'not_reviewed': {
+                'label': 'Not Reviewed',
+                'url': settings.SITE_ROOT +
+                "customreports/?name=not_reviewed",
+
+            },
+            'not_reviewed_by_me': {
+                'label': 'Not Reviewed By Me',
+                'url': settings.SITE_ROOT +
+                "customreports/?name=not_reviewed_by_me",
+            }
+        }
 
     def __getattribute__(self, name):
         """ Get Attribute from module
@@ -36,7 +54,22 @@ class UserBasedDashboardHook(DashboardHook):
                     break
                 f = f.f_back
 
-            site_root = settings.SITE_ROOT
+            if len(self.extension.settings['selected_reports']) == 0:
+                return
+
+            # Set the basic details for the hooks (minus subitems)
+            entries = [
+                {
+                    'label': 'Reports',
+                    'url': '#',
+                    'subitems': []
+                }
+            ]
+
+            # Populate the subitems with what reports have been configured
+            for report in self.extension.settings['selected_reports']:
+                if report in self.report_details:
+                    entries[0]['subitems'].append(self.report_details[report])
 
             user = User.objects.filter(username=username)
             repositories = Repository.objects.filter(Q(public=1) |
@@ -44,27 +77,28 @@ class UserBasedDashboardHook(DashboardHook):
                                                      Q(review_groups__users__in=user))
 
             if len(repositories) == 0:
-                return self.main_entries
+                return entries
             else:
-                entries = {
-                    'label': 'Filter by Repository',
-                    'url': '#',
-                }
-                subitems = []
-                for repo in repositories:
-                    subitem = {'label': str(repo.name),
-                               'url': settings.SITE_ROOT +
-                               "customreports/?name=filter_by_repo&object=" +
-                               str(repo.id)
-                               }
-                    subitems.append(subitem)
+                if 'filter_by_repo' in \
+                        self.extension.settings['selected_reports']:
+                    filter_entries = {
+                        'label': 'Filter by Repository',
+                        'url': '#',
+                    }
+                    subitems = []
+                    for repo in repositories:
+                        subitem = {'label': str(repo.name),
+                                   'url': settings.SITE_ROOT +
+                                   "customreports/?name=filter_by_repo&object=" +
+                                   str(repo.id)
+                                   }
+                        subitems.append(subitem)
 
-                entries['subitems'] = subitems
+                    filter_entries['subitems'] = subitems
 
-                cloned_main_entries = self.main_entries[:]
-                cloned_main_entries.append(entries)
+                    entries.append(filter_entries)
 
-                return cloned_main_entries
+                return entries
         else:
             return DashboardHook.__getattribute__(self, name)
 
@@ -79,26 +113,4 @@ class CustomReportsExtension(Extension):
                                 (r'^customreports/',
                                  include('rbcustomreports.urls'))))
 
-        self.dashboard_hook = UserBasedDashboardHook(self, entries=[
-            {
-                'label': 'Reports',
-                'url': '#',
-                'subitems': [
-                    {
-                        'label': 'Not closed with Shipit',
-                        'url': settings.SITE_ROOT +
-                        "customreports/?name=not_closed_with_shipit",
-                    },
-                    {
-                        'label': 'Not Reviewed',
-                        'url': settings.SITE_ROOT +
-                        "customreports/?name=not_reviewed",
-                    },
-                    {
-                        'label': 'Not Reviewed By Me',
-                        'url': settings.SITE_ROOT +
-                        "customreports/?name=not_reviewed_by_me",
-                    }
-                ]
-            }
-        ])
+        self.dashboard_hook = UserBasedDashboardHook(self, entries=[])

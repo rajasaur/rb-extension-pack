@@ -53,6 +53,6 @@ def report(request,
 
 
 def configure(request,
-              template_name='rbreports/configure.html'):
+              template_name='rbcustomreports/configure.html'):
     return render_to_response(template_name, RequestContext(request, {
     }))
