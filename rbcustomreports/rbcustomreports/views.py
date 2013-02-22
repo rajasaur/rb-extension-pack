@@ -36,6 +36,16 @@ def report(request,
     if not report_name:
         raise Http404
 
+    # Check if its a configured report in admin pages
+    from reviewboard.extensions.base import get_extension_manager
+    from rbcustomreports.extension import CustomReportsExtension
+
+    extension_manager = get_extension_manager()
+    extension = extension_manager.get_enabled_extension(
+        CustomReportsExtension.id)
+    if report_name not in extension.settings['selected_reports']:
+        raise Http404
+
     report_title = reports[report_name]['title']
     if not report_title:
         raise Http404
