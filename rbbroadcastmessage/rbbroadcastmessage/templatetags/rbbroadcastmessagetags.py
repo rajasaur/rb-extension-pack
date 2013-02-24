@@ -13,4 +13,7 @@ def broadcast_message(context):
     extension_manager = get_extension_manager()
     extension = extension_manager.get_enabled_extension(
         BroadcastMessageExtension.id)
-    return extension.settings['broadcast_message']
+    if extension.settings.has_key('broadcast_message'):
+        return extension.settings['broadcast_message']
+    else:
+        return ""
