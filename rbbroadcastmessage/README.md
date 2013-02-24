@@ -16,6 +16,9 @@ This extension allows an administrator to publish broadcast messages to the user
 * Click on the "Configure" link in the extension, which allows you to enter a Broadcast message. Enter the message and Save.
 * Enjoy! All pages of the Reviewboard installation should have the Broadcast message.
 
+#### Troubleshooting
+In case you get a TemplateNotFound on rbbroadcastmessage/message.html **immediately** after enabling the extension, there is a transient bug thats causing it to happen. Please restart the server and it should start working from them on.I will update if this bug gets resolved by then. 
+
 #### Screenshots
 <div>
 <b>Configuration of Broadcast Message in Extensions Administration</b>
