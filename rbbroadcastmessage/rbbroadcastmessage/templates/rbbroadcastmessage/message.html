@@ -1,0 +1,11 @@
+{% load rbbroadcastmessagetags %}
+
+{% broadcast_message as the_message %}
+
+{% if the_message %}
+<div class="box-container">
+ <div class="box tip">
+  <h1>{{ the_message }}</h1>
+ </div>
+</div>
+{% endif %}
