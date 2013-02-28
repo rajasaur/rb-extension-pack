@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-PACKAGE = "RB-Custom Reports"
+PACKAGE = "RB-CustomReports"
 VERSION = "0.1"
 
 setup(

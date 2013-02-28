@@ -9,5 +9,6 @@ class CustomReportsSettingsForm(SettingsForm):
 
     def __init__(self, *args, **kwargs):
         super(CustomReportsSettingsForm, self).__init__(*args, **kwargs)
-        self.initial['selected_reports'] = \
-            [str(val) for val in self.extension.settings['selected_reports']]
+        if self.extension.settings.has_key('selected_reports'):
+            self.initial['selected_reports'] = \
+                [str(val) for val in self.extension.settings['selected_reports']]
