@@ -1,6 +1,5 @@
 from django import forms
 from djblets.extensions.forms import SettingsForm
-from rbcustomreports.models import CustomReports
 from rbcustomreports.views import reports
 
 
