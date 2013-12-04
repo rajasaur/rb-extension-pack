@@ -1,3 +1,9 @@
-## Custom Extensions for ReviewBoard
+Review Board Extension Pack
+===========================
 
-This project adds custom extensions to Reviewboard. Reviewboard > 1.7.x provides extensions that allows users to add custom content. This project adds things like RSSFeeds and Custom Reports that are not available in the standard reviewboard installation. Please see the respective extensions for how to install and feature set.
+This repository contains a variety of extensions for Review Board. Some of
+these are experimental and not complete, while others can be used on a
+production server.
+
+See the READMEs in each directory for an explanation of the extension, the
+versions of Review Board its compatible with, and the status of the extension.
